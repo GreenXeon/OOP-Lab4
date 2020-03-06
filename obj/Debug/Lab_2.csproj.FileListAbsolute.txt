@@ -1,0 +1,15 @@
+D:\УНИК\4 сем\OOP\Lab_2\bin\Debug\Lab_2.exe.config
+D:\УНИК\4 сем\OOP\Lab_2\bin\Debug\Lab_2.exe
+D:\УНИК\4 сем\OOP\Lab_2\bin\Debug\Lab_2.pdb
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2.csprojAssemblyReference.cache
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\MainWindow.g.cs
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\App.g.cs
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2_MarkupCompile.cache
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2_MarkupCompile.lref
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\MainWindow.baml
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2.g.resources
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2.Properties.Resources.resources
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2.csproj.GenerateResource.cache
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2.csproj.CoreCompileInputs.cache
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2.exe
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2.pdb

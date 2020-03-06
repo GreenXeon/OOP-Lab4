@@ -24,5 +24,10 @@ namespace Lab_2
         {
             InitializeComponent();
         }
+
+        private void App_Loaded(object sender, RoutedEventArgs e)
+        {
+            //create classes and add some instances
+        }
     }
 }
