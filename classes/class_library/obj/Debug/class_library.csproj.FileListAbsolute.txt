@@ -1,6 +1,6 @@
 D:\УНИК\4 сем\OOP\Lab_2\classes\class_library\bin\Debug\class_library.dll
 D:\УНИК\4 сем\OOP\Lab_2\classes\class_library\bin\Debug\class_library.pdb
-D:\УНИК\4 сем\OOP\Lab_2\classes\class_library\obj\Debug\class_library.csprojAssemblyReference.cache
 D:\УНИК\4 сем\OOP\Lab_2\classes\class_library\obj\Debug\class_library.csproj.CoreCompileInputs.cache
 D:\УНИК\4 сем\OOP\Lab_2\classes\class_library\obj\Debug\class_library.dll
 D:\УНИК\4 сем\OOP\Lab_2\classes\class_library\obj\Debug\class_library.pdb
+D:\УНИК\4 сем\OOP\Lab_2\classes\class_library\obj\Debug\class_library.csprojAssemblyReference.cache

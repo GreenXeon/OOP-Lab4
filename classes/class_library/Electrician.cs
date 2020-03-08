@@ -15,7 +15,20 @@ namespace classes_library
             Drill
 
         }
-        public Tools Tool { get; set; }
+        public Tools Tool
+        {
+
+            get
+            {
+                return Tool;
+            }
+
+            set
+            {
+                Tool = (Tools)value;
+            }
+
+        }
 
         //public void CheckEquipmentState()
         //{

@@ -15,7 +15,18 @@ namespace classes_library
         }
 
         public string WrkshopType { get; set; }
-        public Shifts Sft { get; set; }
+        public Shifts Sft
+        {
+            get
+            {
+                return Sft;
+            }
+
+            set
+            {
+                Sft = (Shifts)value;
+            }
+        }
 
         public WorkshopWorker(string sft, string wrkshop_type)
         {

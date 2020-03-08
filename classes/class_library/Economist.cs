@@ -15,7 +15,20 @@ namespace classes_library
             inFormat
 
         }
-        public CalcBrand Calculator { get; set; }
+        public CalcBrand Calculator
+        {
+
+            get
+            {
+                return Calculator;   
+            }
+
+            set
+            {
+                Calculator = (CalcBrand)value;
+            }
+
+        }
 
         //public void DoReport()
         //{

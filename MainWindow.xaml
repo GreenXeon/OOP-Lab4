@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab_2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid x:Name="App" Loaded="App_Loaded">
-        <Button x:Name="btnAdd" Content="Add Object" HorizontalAlignment="Left" Margin="265,25,0,0" VerticalAlignment="Top" Width="90" Height="33"/>
+        Title="MainWindow" Height="600" Width="800">
+    <Grid x:Name="App" Loaded="App_Loaded" Margin="0,0,-6.4,-30">
+        <Button x:Name="btnAdd" Content="Add Object" HorizontalAlignment="Left" Margin="265,25,0,0" VerticalAlignment="Top" Width="90" Height="33" Click="BtnAdd_Click"/>
         <Button x:Name="btnDel" Content="Delete Object" HorizontalAlignment="Left" Margin="265,80,0,0" VerticalAlignment="Top" Width="90" Height="33"/>
         <Button Content="Modify Object" HorizontalAlignment="Left" Margin="265,133,0,0" VerticalAlignment="Top" Width="90" Height="33" RenderTransformOrigin="0.578,-0.31"/>
-        <StackPanel x:Name="pnlBlocks" HorizontalAlignment="Left" Height="400" Margin="10,10,0,0" VerticalAlignment="Top" Width="221"/>
-        <ComboBox x:Name="cmbClasses" HorizontalAlignment="Left" Margin="544,63,0,0" VerticalAlignment="Top" Width="120"/>
+        <StackPanel x:Name="pnlBlocks" Margin="10,10,0,9.8" Width="221" HorizontalAlignment="Left"/>
+        <ComboBox x:Name="cmbClasses" HorizontalAlignment="Left" Margin="580,133,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="CmbClasses_SelectionChanged"/>
     </Grid>
 </Window>

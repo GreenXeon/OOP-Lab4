@@ -5,8 +5,7 @@ namespace classes_library
 {
     abstract public class Worker
     {
-        public static List<Worker> WorkersList;
-        public string PassNum { get; set; } = "00000000";
+        public string PassNum { get; set; }
         public Profile Profile { get; set; }
 
 
