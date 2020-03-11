@@ -5,7 +5,24 @@ namespace classes_library
 {
     abstract public class Worker
     {
-        public string PassNum { get; set; }
+        public string _passnum;
+        public string PassNum
+        {
+            get { return _passnum; }
+            set
+            {
+                if (value.Length != 8)
+                {
+                    _passnum = "00000000";
+                }
+                else
+                {
+                    _passnum = value;
+                }
+            }
+        
+                
+        }
         public Profile Profile { get; set; }
 
 

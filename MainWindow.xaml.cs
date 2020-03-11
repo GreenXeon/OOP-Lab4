@@ -26,7 +26,7 @@ namespace Lab_2
         static List<object> workers = new List<object>();
         static Assembly ClassesAssembly;
         static List<Type> ClassesTypesLib = new List<Type>();
-        static int offset = 1; 
+        static int offset = 1;
         public MainWindow()
         {
             InitializeComponent();
@@ -34,15 +34,15 @@ namespace Lab_2
 
         private void App_Loaded(object sender, RoutedEventArgs e)
         {
-           
+
             ClassesAssembly = Assembly.LoadFile(@"D:\УНИК\4 сем\OOP\Lab_2\classes\class_library\bin\Debug\class_library.dll");
             ClassesTypesLib = ClassesAssembly.GetTypes().Where(type => type.IsClass).ToList();
 
             foreach (var currentClass in ClassesTypesLib)
             {
-                if ( (!currentClass.IsAbstract) && (!currentClass.IsSealed))
+                if ((!currentClass.IsAbstract) && (!currentClass.IsSealed))
                     cmbClasses.Items.Add(currentClass.Name);
-            }            
+            }
 
             if (cmbClasses.Items.Count > 0)
             {
@@ -53,12 +53,12 @@ namespace Lab_2
 
         }
 
-        int index = 0;
-        public object AddFieldsToObject (Type currentClass)
+
+        public object AddFieldsToObject(Type currentClass, int index)
         {
             var obj = ClassesAssembly.CreateInstance(currentClass.FullName);
             var properties = currentClass.GetProperties();
-            
+
             foreach (var property in properties)
             {
                 if (property.PropertyType == typeof(int))
@@ -69,9 +69,9 @@ namespace Lab_2
                     }
                     catch
                     {
-                        //show message
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine,property.Name));
                     }
-                    
+
                 }
 
                 else if (property.PropertyType == typeof(String))
@@ -82,7 +82,7 @@ namespace Lab_2
                     }
                     catch
                     {
-                        //s msg
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
                     }
                 }
 
@@ -90,11 +90,11 @@ namespace Lab_2
                 {
                     try
                     {
-                        property.SetValue(obj, Char.Parse(((TextBox)pnlBlocks.Children[index]).Text));
+                        property.SetValue(obj,((TextBox)pnlBlocks.Children[index]).Text[0]);
                     }
                     catch
                     {
-                        //s msg
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
                     }
                 }
 
@@ -107,14 +107,14 @@ namespace Lab_2
                     }
                     catch
                     {
-                        //s msg
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
                     }
                 }
 
                 else if (property.PropertyType.IsClass)
                 {
                     index++;
-                    var agreg = AddFieldsToObject(property.PropertyType);
+                    var agreg = AddFieldsToObject(property.PropertyType, index);
                     property.SetValue(obj, agreg);
                     index--;
                 }
@@ -136,10 +136,10 @@ namespace Lab_2
             {
                 if (currentClassName == currentClass.Name)
                 {
-                   
-                     var newWorker = AddFieldsToObject(currentClass);
-                     workers.Add(newWorker);
-                    
+
+                    var newWorker = AddFieldsToObject(currentClass, 0);
+                    workers.Add(newWorker);
+
 
                 }
             }
@@ -163,7 +163,7 @@ namespace Lab_2
                 else if (property.PropertyType.IsEnum)
                 {
                     var newComboBox = new ComboBox();
-                    newComboBox.Margin = new Thickness(leftMargin, 5*offset, 0, 0);
+                    newComboBox.Margin = new Thickness(leftMargin, 5 * offset, 0, 0);
                     newComboBox.Name = "ComboBox" + property.Name;
                     newComboBox.Text = property.Name;
 
@@ -175,19 +175,19 @@ namespace Lab_2
                     pnlBlocks.Children.Add(newComboBox);
                 }
 
-                else if (property.PropertyType.IsClass) 
+                else if (property.PropertyType.IsClass)
                 {
                     pnlBlocks.Children.Add(new System.Windows.Controls.Label()
                     {
                         Content = property.PropertyType.Name,
                         Margin = new Thickness(leftMargin, 5 * offset, 0, 0),
-                        
-                    }) ;
+
+                    });
                     offset++;
                     CreateFieldsOnForm(property.PropertyType, leftMargin + 15);
 
                 }
-                
+
                 offset++;
 
             }
@@ -196,6 +196,7 @@ namespace Lab_2
 
         private void CmbClasses_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            pnlBlocks.Children.Clear();
             var currentClassName = cmbClasses.SelectedItem.ToString();
 
             foreach (var currentClass in ClassesTypesLib)
@@ -204,10 +205,10 @@ namespace Lab_2
                 {
                     offset = 1;
                     CreateFieldsOnForm(currentClass, 20);
-                    //var newWorker = ClassesAssembly.CreateInstance(currentClass.FullName);
-                    break;                     
                     
-                   
+                    break;
+
+
                 }
             }
 
@@ -215,42 +216,236 @@ namespace Lab_2
 
         private void BtnDel_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                int IndexForDeleting = Int32.Parse(tbDeleting.Text);
+                workers.RemoveAt(IndexForDeleting - 1);
+                tbShowing.AppendText("Item was deleted successfully!" + Environment.NewLine);
+            }
+            catch
+            {
+                tbShowing.AppendText("Entered index is incorrect!" + Environment.NewLine);
+            }
         }
 
         private void ShowAllFields(object currentObject)
         {
             var properties = currentObject.GetType().GetProperties();
 
-           
+
             foreach (var property in properties)
             {
-                if ( (property.PropertyType.IsClass)
-                    && (property.PropertyType != typeof(String)) )
+                if ((property.PropertyType.IsClass)
+                    && (property.PropertyType != typeof(String)))
                 {
-                    ShowAllFields(property.GetValue(currentObject)); 
-                    //tbShowing.AppendText("hELLO!");
-
+                    ShowAllFields(property.GetValue(currentObject));
+                   
                 }
                 else
-                    tbShowing.AppendText(property.GetValue(currentObject) + " ");
+                    tbShowing.AppendText("\t" + property.Name+ ": " +property.GetValue(currentObject)
+                                           + Environment.NewLine);
             }
 
-            
-           
+
+
         }
 
         private void BtnShow_Click(object sender, RoutedEventArgs e)
         {
             int number = 1;
-           foreach(var currentObject in workers)
-           {
-                tbShowing.AppendText(number.ToString() + " ");
+            tbShowing.AppendText("Existing workers: " + Environment.NewLine);
+            foreach (var currentObject in workers)
+            {
+                tbShowing.AppendText(number.ToString() + ". (" 
+                                    + currentObject.GetType().Name + " ):" + Environment.NewLine );
                 ShowAllFields(currentObject);
                 tbShowing.AppendText(Environment.NewLine);
                 number++;
 
 
+            }
+        }
+
+
+        public void SetValuesOnForm(object currentObject, int index)
+        {
+
+            var properties = currentObject.GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                if (property.PropertyType == typeof(int))
+                {
+                    try
+                    {
+                        var value = property.GetValue(currentObject);
+                        ((TextBox)(pnlBlocks.Children[index])).Text = ((int)value).ToString();
+                    }
+                    catch
+                    {
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
+                    }
+
+                }
+
+                else if (property.PropertyType == typeof(String))
+                {
+                    try
+                    {
+                        var value = property.GetValue(currentObject);
+                        ((TextBox)(pnlBlocks.Children[index])).Text = value.ToString();
+                    }
+                    catch
+                    {
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
+                    }
+                }
+
+                else if (property.PropertyType == typeof(char))
+                {
+                    try
+                    {
+                        var value = property.GetValue(currentObject);
+                        ((TextBox)(pnlBlocks.Children[index])).Text = ((char)value).ToString();
+                    }
+                    catch
+                    {
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
+                    }
+                }
+
+
+                else if (property.PropertyType.IsEnum)
+                {
+                    try
+                    {
+                        var value = property.GetValue(currentObject);
+
+                        ((ComboBox)(pnlBlocks.Children[index])).SelectedItem = value.ToString();
+                    }
+                    catch
+                    {
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
+                    }
+                }
+
+                else if (property.PropertyType.IsClass)
+                {
+                    index++;
+                    var agreg = property.GetValue(currentObject);
+                    SetValuesOnForm(agreg, index);
+                    index--;
+                }
+
+                index++;
+
+            }
+
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int IndexForModifying = Int32.Parse(tbDeleting.Text);
+                var modifiedWorker = workers[IndexForModifying - 1];
+                SetValuesOnForm(modifiedWorker, 0);
+                tbShowing.AppendText("Item is waiting for modifyings..." + Environment.NewLine);
+            }
+            catch
+            {
+                tbShowing.AppendText("Entered index is incorrect!" + Environment.NewLine);
+            }
+        }
+
+
+
+        public object UpdateFieldsInObject(object obj, int index)
+        {
+           
+            var properties = obj.GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                if (property.PropertyType == typeof(int))
+                {
+                    try
+                    {
+                        property.SetValue(obj, Int32.Parse(((TextBox)pnlBlocks.Children[index]).Text));
+                    }
+                    catch
+                    {
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
+                    }
+
+                }
+
+                else if (property.PropertyType == typeof(String))
+                {
+                    try
+                    {
+                        property.SetValue(obj, ((TextBox)pnlBlocks.Children[index]).Text);
+                    }
+                    catch
+                    {
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
+                    }
+                }
+
+                else if (property.PropertyType == typeof(char))
+                {
+                    try
+                    {
+                        property.SetValue(obj, Char.Parse(((TextBox)pnlBlocks.Children[index]).Text));
+                    }
+                    catch
+                    {
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
+                    }
+                }
+
+
+                else if (property.PropertyType.IsEnum)
+                {
+                    try
+                    {
+                        property.SetValue(obj, ((ComboBox)pnlBlocks.Children[index]).SelectedIndex);
+                    }
+                    catch
+                    {
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
+                    }
+                }
+
+                else if (property.PropertyType.IsClass)
+                {
+                    index++;
+                    var agreg = UpdateFieldsInObject(property.GetValue(obj), index);
+                    property.SetValue(obj, agreg);
+                    index--;
+                }
+
+                index++;
+
+            }
+
+            return obj;
+
+        }
+
+        private void BtnModify_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int IndexForModifying = Int32.Parse(tbDeleting.Text);
+                var modifiedWorker = workers[IndexForModifying - 1];
+                workers[IndexForModifying-1] = UpdateFieldsInObject(modifiedWorker, 0);
+                tbShowing.AppendText("Item was modifying successfully!" + Environment.NewLine);
+            }
+            catch
+            {
+                tbShowing.AppendText("Entered index is incorrect!" + Environment.NewLine);
             }
         }
     }

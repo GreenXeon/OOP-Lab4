@@ -6,17 +6,26 @@ namespace classes_library
 {
     public class Clerk : Worker
     {
-        public string OfficeNum { get; set; }
 
-        //public void WaitForTheWeekEnd()
-        //{
-        //    Console.WriteLine("I am still waiting for the weekend");
-        //}
+        public string _officenum;
+        public string OfficeNum
+        {
+            get { return _officenum; }
 
-        //public void BeingLate()
-        //{
-        //    Console.WriteLine("Sorry for being late");
-        //}
+            set
+            {
+                if ((value.Length > 6) || (value.Length == 0))
+                {
+                    _officenum = "000000";
+                }
+                else
+                {
+                    _officenum = value;
+                }
+            }
+        }
+
+        
 
         public override string AddWorker()
         {

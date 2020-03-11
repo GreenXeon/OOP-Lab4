@@ -6,8 +6,41 @@ namespace classes_library
 {
     public class Manager : Worker
     {
-        public string Department { get; set; }
-        public int QuantOfInfer { get; set; }
+        public string _department;
+        public int _quantofinfer;
+        public string Department
+        {
+            get { return _department; }
+
+            set
+            {
+                if ((value.Length > 25 ) || (value.Length == 0))
+                {
+                    _department = "INCORRECT_DEPARTAMENT_NAME";
+                }
+                else
+                {
+                    _department = value;
+                }
+            }
+        }
+        public int QuantOfInfer
+        {
+            get { return _quantofinfer; }
+
+            set
+            {
+                if ((value > 100000) || (value < 1))
+                {
+                    _quantofinfer = 0;
+                }
+                else
+                {
+                    _quantofinfer = value;
+                }
+
+            }
+        }
 
         public override string AddWorker()
         {

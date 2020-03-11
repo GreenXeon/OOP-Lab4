@@ -14,27 +14,12 @@ namespace classes_library
             Night
         }
 
-        public string WrkshopType { get; set; }
-        public Shifts Sft
-        {
-            get
-            {
-                return Sft;
-            }
 
-            set
-            {
-                Sft = (Shifts)value;
-            }
-        }
+       
+        public Shifts Sft { get; set; }
+       
 
-        public WorkshopWorker(string sft, string wrkshop_type)
-        {
-            Sft = (Shifts)Enum.Parse(typeof(Shifts), sft);
-            WrkshopType = wrkshop_type;
-
-        }
-
+        
         //public void HaveSmokeBreak()
         //{
         //    Console.WriteLine("I am smoking now...");

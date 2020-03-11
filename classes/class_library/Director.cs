@@ -6,7 +6,24 @@ namespace classes_library
 {
     public class Director : Manager
     {
-        public int ShareProcent { get; set; }
+        public int _shareprocent;
+        public int ShareProcent
+        {
+            get { return _shareprocent; }
+
+            set
+            {
+                if ( (value < 1) || (value > 100) )
+                {
+                    _shareprocent = 0;
+                }
+                else
+                {
+                    _shareprocent = value;
+                }
+            }
+
+        }
 
         //public void SackWorker()
         //{

@@ -15,26 +15,8 @@ namespace classes_library
             Drill
 
         }
-        public Tools Tool
-        {
-
-            get
-            {
-                return Tool;
-            }
-
-            set
-            {
-                Tool = (Tools)value;
-            }
-
-        }
-
-        //public void CheckEquipmentState()
-        //{
-        //    Console.WriteLine("I am checking");
-        //}
-
+        public Tools Tool { get; set; }
+        
 
     }
 
