@@ -8,9 +8,11 @@
         Title="MainWindow" Height="600" Width="800">
     <Grid x:Name="App" Loaded="App_Loaded" Margin="0,0,-6.4,-30">
         <Button x:Name="btnAdd" Content="Add Object" HorizontalAlignment="Left" Margin="265,25,0,0" VerticalAlignment="Top" Width="90" Height="33" Click="BtnAdd_Click"/>
-        <Button x:Name="btnDel" Content="Delete Object" HorizontalAlignment="Left" Margin="265,80,0,0" VerticalAlignment="Top" Width="90" Height="33"/>
+        <Button x:Name="btnDel" Content="Delete Object" HorizontalAlignment="Left" Margin="265,80,0,0" VerticalAlignment="Top" Width="90" Height="33" Click="BtnDel_Click"/>
         <Button Content="Modify Object" HorizontalAlignment="Left" Margin="265,133,0,0" VerticalAlignment="Top" Width="90" Height="33" RenderTransformOrigin="0.578,-0.31"/>
         <StackPanel x:Name="pnlBlocks" Margin="10,10,0,9.8" Width="221" HorizontalAlignment="Left"/>
-        <ComboBox x:Name="cmbClasses" HorizontalAlignment="Left" Margin="580,133,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="CmbClasses_SelectionChanged"/>
+        <ComboBox x:Name="cmbClasses" HorizontalAlignment="Left" Margin="437,25,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="CmbClasses_SelectionChanged"/>
+        <Button x:Name="btnShow" Content="Show All Workers" HorizontalAlignment="Left" Margin="265,195,0,0" VerticalAlignment="Top" Width="90" Height="33" RenderTransformOrigin="0.491,0.567" Click="BtnShow_Click"/>
+        <TextBox x:Name="tbShowing" AcceptsReturn="True" HorizontalAlignment="Left" Height="275" Margin="265,272,0,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalScrollBarVisibility="Visible" Width="493"/>
     </Grid>
 </Window>

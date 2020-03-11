@@ -40,7 +40,7 @@ namespace Lab_2
 
             foreach (var currentClass in ClassesTypesLib)
             {
-                if (!currentClass.IsAbstract)
+                if ( (!currentClass.IsAbstract) && (!currentClass.IsSealed))
                     cmbClasses.Items.Add(currentClass.Name);
             }            
 
@@ -54,8 +54,9 @@ namespace Lab_2
         }
 
         int index = 0;
-        public void AddFieldsToObject (object obj, Type currentClass)
+        public object AddFieldsToObject (Type currentClass)
         {
+            var obj = ClassesAssembly.CreateInstance(currentClass.FullName);
             var properties = currentClass.GetProperties();
             
             foreach (var property in properties)
@@ -102,7 +103,7 @@ namespace Lab_2
                 {
                     try
                     {
-                        property.SetValue(obj,((ComboBox)pnlBlocks.Children[index]).SelectedIndex);
+                        property.SetValue(obj, ((ComboBox)pnlBlocks.Children[index]).SelectedIndex);
                     }
                     catch
                     {
@@ -113,13 +114,16 @@ namespace Lab_2
                 else if (property.PropertyType.IsClass)
                 {
                     index++;
-                    AddFieldsToObject(obj, property.PropertyType);
+                    var agreg = AddFieldsToObject(property.PropertyType);
+                    property.SetValue(obj, agreg);
                     index--;
                 }
 
                 index++;
 
             }
+
+            return obj;
 
         }
 
@@ -132,12 +136,10 @@ namespace Lab_2
             {
                 if (currentClassName == currentClass.Name)
                 {
-                    var newWorker = ClassesAssembly.CreateInstance(currentClass.FullName);
-                    if (! (newWorker == null))
-                    {
-                        AddFieldsToObject(newWorker,currentClass);       
-                    }
-
+                   
+                     var newWorker = AddFieldsToObject(currentClass);
+                     workers.Add(newWorker);
+                    
 
                 }
             }
@@ -209,6 +211,47 @@ namespace Lab_2
                 }
             }
 
+        }
+
+        private void BtnDel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ShowAllFields(object currentObject)
+        {
+            var properties = currentObject.GetType().GetProperties();
+
+           
+            foreach (var property in properties)
+            {
+                if ( (property.PropertyType.IsClass)
+                    && (property.PropertyType != typeof(String)) )
+                {
+                    ShowAllFields(property.GetValue(currentObject)); 
+                    //tbShowing.AppendText("hELLO!");
+
+                }
+                else
+                    tbShowing.AppendText(property.GetValue(currentObject) + " ");
+            }
+
+            
+           
+        }
+
+        private void BtnShow_Click(object sender, RoutedEventArgs e)
+        {
+            int number = 1;
+           foreach(var currentObject in workers)
+           {
+                tbShowing.AppendText(number.ToString() + " ");
+                ShowAllFields(currentObject);
+                tbShowing.AppendText(Environment.NewLine);
+                number++;
+
+
+            }
         }
     }
 }
