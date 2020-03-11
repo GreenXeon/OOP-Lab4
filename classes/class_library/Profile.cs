@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 
 
@@ -17,7 +18,7 @@ namespace classes_library
 
             set
             {
-                if ((value.Length > 40) || (value.Length == 0))
+                if ((value.Length > 40) || (value.Length == 0) || (!Regex.IsMatch(value, @"^([a-zA-Z]+\s*)+$")))
                 {
                     _name = "INCORRECT_NAME";
                 }
@@ -36,7 +37,7 @@ namespace classes_library
 
             set
             {
-                if ((value.Length > 40) || (value.Length == 0))
+                if ((value.Length > 40) || (value.Length == 0) || (!Regex.IsMatch(value, @"^([a-zA-Z]+\s*)+$")))
                 {
                     _surname = "INCORRECT_SURNAME";
                 }
@@ -96,7 +97,7 @@ namespace classes_library
 
             set
             {
-                if ((value.Length > 80) || (value.Length == 0) )
+                if ((value.Length > 80) || (value.Length == 0) || (!Regex.IsMatch(value, @"^([a-zA-Z]+\s*)+$")))
                 {
                     _university = "INCORRECT_UNIVERSITY_NAME";
                 }

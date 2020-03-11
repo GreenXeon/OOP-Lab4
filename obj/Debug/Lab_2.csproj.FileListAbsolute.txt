@@ -13,3 +13,4 @@ D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2.csproj.GenerateResource.cache
 D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2.csproj.CoreCompileInputs.cache
 D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2.exe
 D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\Lab_2.pdb
+D:\УНИК\4 сем\OOP\Lab_2\obj\Debug\App.baml

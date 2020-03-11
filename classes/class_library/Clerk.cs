@@ -14,7 +14,8 @@ namespace classes_library
 
             set
             {
-                if ((value.Length > 6) || (value.Length == 0))
+                
+                if ((value.Length > 6) || (value.Length == 0) || (!Int32.TryParse(value,out int i)))
                 {
                     _officenum = "000000";
                 }

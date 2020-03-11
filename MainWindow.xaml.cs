@@ -139,6 +139,7 @@ namespace Lab_2
 
                     var newWorker = AddFieldsToObject(currentClass, 0);
                     workers.Add(newWorker);
+                    tbShowing.AppendText("Object was added successfully!" + Environment.NewLine);
 
 
                 }
@@ -218,13 +219,32 @@ namespace Lab_2
         {
             try
             {
-                int IndexForDeleting = Int32.Parse(tbDeleting.Text);
-                workers.RemoveAt(IndexForDeleting - 1);
-                tbShowing.AppendText("Item was deleted successfully!" + Environment.NewLine);
+                switch (cmbDeletingType.SelectedIndex)
+                {
+                    case 0:
+                        int IndexForDeleting = Int32.Parse(tbDeleting.Text);
+                        workers.RemoveAt(IndexForDeleting - 1);
+                        tbShowing.AppendText("Item was deleted successfully!" + Environment.NewLine);
+                        break;
+                    case 1:
+                        for(int i = 0; i < workers.Count; i++)
+                        {
+                            var property = workers[i].GetType().GetProperty("PassNum");
+                            if (property.GetValue(workers[i]).ToString() == tbDeleting.Text)
+                            {
+                                workers.RemoveAt(i);
+                                tbShowing.AppendText("Item was deleted successfully!" + Environment.NewLine);
+                                //break;
+                            }
+                           
+                        }
+                        break;
+                   
+                }
             }
             catch
             {
-                tbShowing.AppendText("Entered index is incorrect!" + Environment.NewLine);
+                tbShowing.AppendText("Entered index or string is incorrect!" + Environment.NewLine);
             }
         }
 
@@ -252,6 +272,7 @@ namespace Lab_2
 
         private void BtnShow_Click(object sender, RoutedEventArgs e)
         {
+         
             int number = 1;
             tbShowing.AppendText("Existing workers: " + Environment.NewLine);
             foreach (var currentObject in workers)
@@ -348,14 +369,36 @@ namespace Lab_2
         {
             try
             {
-                int IndexForModifying = Int32.Parse(tbDeleting.Text);
-                var modifiedWorker = workers[IndexForModifying - 1];
-                SetValuesOnForm(modifiedWorker, 0);
-                tbShowing.AppendText("Item is waiting for modifyings..." + Environment.NewLine);
+
+                switch (cmbDeletingType.SelectedIndex)
+                {
+                    case 0:
+                        int IndexForModifying = Int32.Parse(tbDeleting.Text);
+                        var modifiedWorker = workers[IndexForModifying - 1];
+                        SetValuesOnForm(modifiedWorker, 0);
+                        tbShowing.AppendText("Item is waiting for modifying..." + Environment.NewLine);
+                        break;
+                    case 1:
+                        foreach (var worker in workers)
+                        {
+                            var property = worker.GetType().GetProperty("PassNum");
+                            if (property.GetValue(worker).ToString() == tbDeleting.Text)
+                            {
+                                modifiedWorker = worker;
+                                SetValuesOnForm(modifiedWorker, 0);
+                                tbShowing.AppendText("Item is waiting for modifying..." + Environment.NewLine);
+                                break;
+                            }
+
+                        }
+                        break;
+                    
+                }
+                
             }
             catch
             {
-                tbShowing.AppendText("Entered index is incorrect!" + Environment.NewLine);
+                tbShowing.AppendText("Entered index or string is incorrect!" + Environment.NewLine);
             }
         }
 
@@ -438,15 +481,62 @@ namespace Lab_2
         {
             try
             {
-                int IndexForModifying = Int32.Parse(tbDeleting.Text);
-                var modifiedWorker = workers[IndexForModifying - 1];
-                workers[IndexForModifying-1] = UpdateFieldsInObject(modifiedWorker, 0);
-                tbShowing.AppendText("Item was modifying successfully!" + Environment.NewLine);
+                object modifiedWorker; 
+                switch (cmbDeletingType.SelectedIndex)
+                {
+                    case 0:
+                        int IndexForModifying = Int32.Parse(tbDeleting.Text);
+                        modifiedWorker = workers[IndexForModifying - 1];
+                        workers[IndexForModifying - 1] = UpdateFieldsInObject(modifiedWorker, 0);
+                        tbShowing.AppendText("Item was modifying successfully!" + Environment.NewLine);
+                        break;
+                    case 1:
+                        for (int i = 0; i < workers.Count; i++)
+                        {
+                            var property = workers[i].GetType().GetProperty("PassNum");
+                            if (property.GetValue(workers[i]).ToString() == tbDeleting.Text)
+                            {
+                                modifiedWorker = workers[i];
+                                workers[i] = UpdateFieldsInObject(modifiedWorker, 0);
+                                tbShowing.AppendText("Item was modifying successfully!" + Environment.NewLine);
+                                break;
+                            }
+
+                        }
+
+                        break;
+
+                }
+                
             }
             catch
             {
                 tbShowing.AppendText("Entered index is incorrect!" + Environment.NewLine);
             }
+        }
+
+        private void CmbClasses_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            pnlBlocks.Children.Clear();
+            var currentClassName = cmbClasses.SelectedItem.ToString();
+
+            foreach (var currentClass in ClassesTypesLib)
+            {
+                if (currentClassName == currentClass.Name)
+                {
+                    offset = 1;
+                    CreateFieldsOnForm(currentClass, 20);
+
+                    break;
+
+
+                }
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            tbShowing.Text = "";
         }
     }
 }

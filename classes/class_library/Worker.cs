@@ -11,7 +11,7 @@ namespace classes_library
             get { return _passnum; }
             set
             {
-                if (value.Length != 8)
+                if ((value.Length != 8) || (!Int32.TryParse(value, out int i) ))
                 {
                     _passnum = "00000000";
                 }

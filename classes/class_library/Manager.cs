@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace classes_library
 {
@@ -14,7 +15,7 @@ namespace classes_library
 
             set
             {
-                if ((value.Length > 25 ) || (value.Length == 0))
+                if ((value.Length > 25 ) || (value.Length == 0) || (!Regex.IsMatch(value, @"^([a-zA-Z]+\s*)+$")))
                 {
                     _department = "INCORRECT_DEPARTAMENT_NAME";
                 }

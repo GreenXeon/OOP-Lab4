@@ -6,7 +6,7 @@ namespace classes_library
 {
     public class WorkshopWorker : Worker
     {
-        public enum Shifts : byte
+        public enum Shifts
         {
             Morning,
             Afternoon,
