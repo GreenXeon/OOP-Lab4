@@ -14,6 +14,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text.RegularExpressions;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Runtime.Serialization;
+using IMySerialization;
 
 namespace Lab_2
 {
@@ -23,19 +28,25 @@ namespace Lab_2
     public partial class MainWindow : Window
     {
 
-        static List<object> workers = new List<object>();
+        static readonly List<object> workers = new List<object>();
         static Assembly ClassesAssembly;
         static List<Type> ClassesTypesLib = new List<Type>();
         static int offset = 1;
+        static string SaveInFileName = "";
+        static string OpenForFileName = "";
+        static string fileType = "";
+
+
         public MainWindow()
         {
             InitializeComponent();
+
         }
 
         private void App_Loaded(object sender, RoutedEventArgs e)
         {
 
-            ClassesAssembly = Assembly.LoadFile(@"D:\УНИК\4 сем\OOP\Lab_2\classes\class_library\bin\Debug\class_library.dll");
+            ClassesAssembly = Assembly.LoadFile(@"D:\УНИК\4 сем\OOP\Lab_3\classes\class_library\bin\Debug\class_library.dll");
             ClassesTypesLib = ClassesAssembly.GetTypes().Where(type => type.IsClass).ToList();
 
             foreach (var currentClass in ClassesTypesLib)
@@ -48,6 +59,13 @@ namespace Lab_2
             {
                 cmbClasses.SelectedIndex = 0;
             }
+
+            if (cmbSerializationType.Items.Count > 0)
+            {
+                cmbSerializationType.SelectedIndex = 0;
+            }
+
+
 
 
 
@@ -69,7 +87,7 @@ namespace Lab_2
                     }
                     catch
                     {
-                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine,property.Name));
+                        tbShowing.AppendText(String.Format("Incorrect data at field {0}" + Environment.NewLine, property.Name));
                     }
 
                 }
@@ -90,7 +108,7 @@ namespace Lab_2
                 {
                     try
                     {
-                        property.SetValue(obj,((TextBox)pnlBlocks.Children[index]).Text[0]);
+                        property.SetValue(obj, ((TextBox)pnlBlocks.Children[index]).Text[0]);
                     }
                     catch
                     {
@@ -144,7 +162,7 @@ namespace Lab_2
 
                 }
             }
-            //pnlBlocks.Children.Clear(); 
+
         }
 
         private void CreateFieldsOnForm(Type currentClass, int leftMargin)
@@ -163,10 +181,12 @@ namespace Lab_2
 
                 else if (property.PropertyType.IsEnum)
                 {
-                    var newComboBox = new ComboBox();
-                    newComboBox.Margin = new Thickness(leftMargin, 5 * offset, 0, 0);
-                    newComboBox.Name = "ComboBox" + property.Name;
-                    newComboBox.Text = property.Name;
+                    var newComboBox = new ComboBox
+                    {
+                        Margin = new Thickness(leftMargin, 5 * offset, 0, 0),
+                        Name = "ComboBox" + property.Name,
+                        Text = property.Name
+                    };
 
                     foreach (var enumName in property.PropertyType.GetEnumNames())
                         newComboBox.Items.Add(enumName);
@@ -205,8 +225,8 @@ namespace Lab_2
                 if (currentClassName == currentClass.Name)
                 {
                     offset = 1;
-                    CreateFieldsOnForm(currentClass, 20);
-                    
+                    CreateFieldsOnForm(currentClass, 5);
+
                     break;
 
 
@@ -227,19 +247,19 @@ namespace Lab_2
                         tbShowing.AppendText("Item was deleted successfully!" + Environment.NewLine);
                         break;
                     case 1:
-                        for(int i = 0; i < workers.Count; i++)
+                        for (int i = 0; i < workers.Count; i++)
                         {
                             var property = workers[i].GetType().GetProperty("PassNum");
                             if (property.GetValue(workers[i]).ToString() == tbDeleting.Text)
                             {
                                 workers.RemoveAt(i);
                                 tbShowing.AppendText("Item was deleted successfully!" + Environment.NewLine);
-                                //break;
+
                             }
-                           
+
                         }
                         break;
-                   
+
                 }
             }
             catch
@@ -259,10 +279,10 @@ namespace Lab_2
                     && (property.PropertyType != typeof(String)))
                 {
                     ShowAllFields(property.GetValue(currentObject));
-                   
+
                 }
                 else
-                    tbShowing.AppendText("\t" + property.Name+ ": " +property.GetValue(currentObject)
+                    tbShowing.AppendText("\t" + property.Name + ": " + property.GetValue(currentObject)
                                            + Environment.NewLine);
             }
 
@@ -272,13 +292,13 @@ namespace Lab_2
 
         private void BtnShow_Click(object sender, RoutedEventArgs e)
         {
-         
+
             int number = 1;
             tbShowing.AppendText("Existing workers: " + Environment.NewLine);
             foreach (var currentObject in workers)
             {
-                tbShowing.AppendText(number.ToString() + ". (" 
-                                    + currentObject.GetType().Name + " ):" + Environment.NewLine );
+                tbShowing.AppendText(number.ToString() + ". ("
+                                    + currentObject.GetType().Name + " ):" + Environment.NewLine);
                 ShowAllFields(currentObject);
                 tbShowing.AppendText(Environment.NewLine);
                 number++;
@@ -392,9 +412,9 @@ namespace Lab_2
 
                         }
                         break;
-                    
+
                 }
-                
+
             }
             catch
             {
@@ -406,7 +426,7 @@ namespace Lab_2
 
         public object UpdateFieldsInObject(object obj, int index)
         {
-           
+
             var properties = obj.GetType().GetProperties();
 
             foreach (var property in properties)
@@ -481,7 +501,7 @@ namespace Lab_2
         {
             try
             {
-                object modifiedWorker; 
+                object modifiedWorker;
                 switch (cmbDeletingType.SelectedIndex)
                 {
                     case 0:
@@ -507,7 +527,7 @@ namespace Lab_2
                         break;
 
                 }
-                
+
             }
             catch
             {
@@ -537,6 +557,191 @@ namespace Lab_2
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             tbShowing.Text = "";
+        }
+
+        private void CmbSerializationType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void CmbDeletingType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (cmbDeletingType.SelectedIndex)
+            {
+
+                case 0:
+                    tbDeleting.Text = "Number of object";
+                    break;
+                case 1:
+                    tbDeleting.Text = "Pass number of object";
+                    break;
+
+
+            }
+
+        }
+
+        private HashSet<int> AddIndexesFromRange(string enteredRanges)
+        {
+            string correctRange = @"\b\d+\s*-\s*\d+\s*\b";
+            Regex range = new Regex(correctRange);
+            HashSet<int> returnedIndexes = new HashSet<int>();
+
+            foreach (Match r in range.Matches(enteredRanges))
+            {
+                var currentRange = r.ToString();
+                currentRange.Replace(" ", "");
+                string correctIndex = @"\b\d+\b";
+                Regex index = new Regex(correctIndex);
+                MatchCollection indexes = index.Matches(currentRange);
+                for (int i = Int32.Parse(indexes[0].ToString()) - 1; i < Int32.Parse(indexes[1].ToString()); i++)
+                {
+                    returnedIndexes.Add(i);
+
+                }
+
+            }
+
+            return returnedIndexes;
+        }
+
+        private HashSet<int> AddCertainIndexes(string enteredRanges)
+        {
+            HashSet<int> returnedIndexes = new HashSet<int>();
+            string correctIndex = @"\b\d+\b";
+            Regex index = new Regex(correctIndex);
+            MatchCollection indexes = index.Matches(enteredRanges);
+            foreach (Match ind in indexes)
+            {
+                var i = Int32.Parse(ind.ToString());
+                returnedIndexes.Add(i - 1);
+
+            }
+            return returnedIndexes;
+
+        }
+
+
+
+        private void BtnSerialize_Click(object sender, RoutedEventArgs e)
+        {
+            IMySerialization.IMySerialization Serializator;
+            string mes = "";
+            switch (cmbSerializationType.SelectedIndex)
+            {
+                case 0:
+                    Serializator = new MyBinarySerialization();
+                    mes = Serializator.MySerialize(workers, SaveInFileName);
+                    break;
+                case 1:
+                    Serializator = new MyJsonSerialization();
+                    mes = Serializator.MySerialize(workers, SaveInFileName);
+                    break;
+                case 2:
+                    Serializator = new MyTextSerialization();
+                    mes = Serializator.MySerialize(workers, SaveInFileName);
+                    break;
+
+            }
+            if (mes == "OK")
+            {
+                tbShowing.AppendText("Serialization was ENDED successfully!" + Environment.NewLine);
+            }
+            else
+            {
+                tbShowing.AppendText("Error of serialization: " + mes + Environment.NewLine);
+            }
+
+        }
+
+
+
+        private void BtnDeserialize_Click(object sender, RoutedEventArgs e)
+        {
+            IMySerialization.IMySerialization Deserializator;
+            List<object> receivedObjects = new List<object>();
+            switch (cmbSerializationType.SelectedIndex)
+            {
+                case 0:
+                    Deserializator = new MyBinarySerialization();
+                    receivedObjects = Deserializator.MyDeserialize(OpenForFileName);
+
+                    break;
+                case 1:
+                    Deserializator = new MyJsonSerialization();
+                    receivedObjects = Deserializator.MyDeserialize(OpenForFileName);
+                    break;
+                case 2:
+                    Deserializator = new MyTextSerialization();
+                    receivedObjects = Deserializator.MyDeserialize(OpenForFileName);
+                    break;
+                    
+            }
+
+            if (receivedObjects.Count != 0)
+            {
+                tbShowing.AppendText("Binary deserialization was ended successfully!" + Environment.NewLine);
+
+                int number = 1;
+                tbShowing.AppendText("Deserialized objects: " + Environment.NewLine);
+                foreach (var currentObject in receivedObjects)
+                {
+                    tbShowing.AppendText(number.ToString() + ". ("
+                                        + currentObject.GetType().Name + " ):" + Environment.NewLine);
+                    ShowAllFields(currentObject);
+                    tbShowing.AppendText(Environment.NewLine);
+                    number++;
+                }
+            }
+            else
+            {
+                tbShowing.AppendText("Error of deserialization! " + Environment.NewLine);
+            }
+
+        }
+
+
+
+        private void BtnOpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
+            {
+                FileName = "Serialized"
+            };
+            
+            dlg.Filter = IMySerialization.SerializatorsArray.filters;
+
+            bool? result = dlg.ShowDialog();
+            if (result == true)
+            {
+                OpenForFileName = dlg.FileName;
+                tbOpenFileName.Text = OpenForFileName;
+                fileType = dlg.FileName.Split(new char[] { '.' })[1];
+                cmbSerializationType.Text = fileType;
+            }
+
+
+        }
+
+        private void BtnSaveFile_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = "Serialized",
+
+            };
+           
+            dlg.Filter = IMySerialization.SerializatorsArray.filters;
+
+            bool? result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                SaveInFileName = dlg.FileName;
+                tbSaveFileName.Text = SaveInFileName;
+                fileType = dlg.FileName.Split(new char[] { '.' })[1];
+                cmbSerializationType.Text = fileType;
+            }
         }
     }
 }

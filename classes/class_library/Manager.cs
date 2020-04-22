@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace classes_library
 {
+    [Serializable]
     public class Manager : Worker
     {
         public string _department;

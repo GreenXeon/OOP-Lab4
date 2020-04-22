@@ -8,7 +8,8 @@ using System.Text.RegularExpressions;
 
 namespace classes_library
 {
-   sealed public class Profile
+    [Serializable]
+    sealed public class Profile
    {
         public string _name;
 

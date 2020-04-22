@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace classes_library
 {
+    [Serializable]
     abstract public class Worker
     {
         public string _passnum;

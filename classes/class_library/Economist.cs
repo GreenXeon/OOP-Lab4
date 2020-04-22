@@ -4,6 +4,7 @@ using System.Text;
 
 namespace classes_library
 {
+    [Serializable]
     public class Economist : Clerk
     {
         public enum CalcBrand
