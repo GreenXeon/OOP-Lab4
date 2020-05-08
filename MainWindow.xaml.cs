@@ -30,10 +30,14 @@ namespace Lab_2
 
         static readonly List<object> workers = new List<object>();
         static Assembly ClassesAssembly;
+        static Assembly PluginsAssembly;
         static List<Type> ClassesTypesLib = new List<Type>();
+        static List<Type> PluginsLib = new List<Type>();
         static int offset = 1;
         static string SaveInFileName = "";
         static string OpenForFileName = "";
+        static string SaveCompressedFileName = "";
+        static string OpenCompressedFileName = "";
         static string fileType = "";
 
 
@@ -55,9 +59,22 @@ namespace Lab_2
                     cmbClasses.Items.Add(currentClass.Name);
             }
 
+            PluginsAssembly = Assembly.LoadFile(@"D:\УНИК\4 сем\OOP\Lab_3\classes\IArchivePlugin\bin\Debug\netstandard2.0\IArchivePlugin.dll");
+            PluginsLib = FindAllPlugins(PluginsAssembly, "IPlugin");
+
+            foreach (var currentPlugin in PluginsLib)
+            {
+                cmbPlugins.Items.Add(currentPlugin.Name);
+            }
+
             if (cmbClasses.Items.Count > 0)
             {
                 cmbClasses.SelectedIndex = 0;
+            }
+
+            if (cmbPlugins.Items.Count > 0)
+            {
+                cmbPlugins.SelectedIndex = 0;
             }
 
             if (cmbSerializationType.Items.Count > 0)
@@ -65,10 +82,30 @@ namespace Lab_2
                 cmbSerializationType.SelectedIndex = 0;
             }
 
+        }
 
+        private static List<Type> FindAllPlugins(Assembly Dll, string InterfaceName)
+        {
+            List<Type> Plugins = new List<Type>();
+            foreach (var type in Dll.GetTypes())
+            {
+                if (type.IsPublic == true)
+                {
 
+                    if (!type.IsAbstract)
+                    {
 
+                        if (type.GetInterface(InterfaceName) != null)
+                        {
 
+                            Plugins.Add(type);
+                        }
+
+                    }
+                }
+            }
+
+            return Plugins;
         }
 
 
@@ -680,7 +717,7 @@ namespace Lab_2
 
             if (receivedObjects.Count != 0)
             {
-                tbShowing.AppendText("Binary deserialization was ended successfully!" + Environment.NewLine);
+                tbShowing.AppendText("Deserialization was ended successfully!" + Environment.NewLine);
 
                 int number = 1;
                 tbShowing.AppendText("Deserialized objects: " + Environment.NewLine);
@@ -742,6 +779,94 @@ namespace Lab_2
                 fileType = dlg.FileName.Split(new char[] { '.' })[1];
                 cmbSerializationType.Text = fileType;
             }
+        }
+
+        private void BtnSaveCompressed_Click(object sender, RoutedEventArgs e)
+        {
+
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = "Compressed.cmp",
+
+            };
+
+            //dlg.Filter = IMySerialization.SerializatorsArray.filters;
+
+            bool? result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                SaveCompressedFileName = dlg.FileName;
+                tbSaveCompressed.Text = SaveCompressedFileName;
+               // fileType = dlg.FileName.Split(new char[] { '.' })[1];
+               // cmbSerializationType.Text = fileType;
+            }
+
+        }
+
+        private void BtnCompress_Click(object sender, RoutedEventArgs e)
+        {
+            foreach(var currPlugin in PluginsLib)
+            {
+                if(currPlugin.Name == cmbPlugins.SelectedItem.ToString())
+                {
+                    
+                    var obj = PluginsAssembly.CreateInstance(currPlugin.FullName);
+                    var method = currPlugin.GetMethod("Compress");
+                    method.Invoke(obj, new object[] { workers, SaveCompressedFileName });
+                }
+            }
+            
+            
+
+        }
+
+        private void BtnOpenCompressed_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
+            {
+                FileName = "Compressed.cmp"
+            };
+
+            //dlg.Filter = IMySerialization.SerializatorsArray.filters;
+
+            bool? result = dlg.ShowDialog();
+            if (result == true)
+            {
+                OpenCompressedFileName = dlg.FileName;
+                tbOpenCompressed.Text = OpenCompressedFileName;
+                //fileType = dlg.FileName.Split(new char[] { '.' })[1];
+                //cmbSerializationType.Text = fileType;
+            }
+        }
+
+        private void BtnDecompress_Click(object sender, RoutedEventArgs e)
+        {
+            var currPlugin = PluginsLib[1];
+            var obj = PluginsAssembly.CreateInstance(currPlugin.FullName);
+            var method = currPlugin.GetMethod("Decompress");
+            var receivedObjects = method.Invoke(obj, new object[] { OpenCompressedFileName }) as List<object>;
+
+            if (receivedObjects.Count != 0)
+            {
+                tbShowing.AppendText("Decompression was ended successfully!" + Environment.NewLine);
+
+                int number = 1;
+                tbShowing.AppendText("Decompressed objects: " + Environment.NewLine);
+                foreach (var currentObject in receivedObjects)
+                {
+                    tbShowing.AppendText(number.ToString() + ". ("
+                                        + currentObject.GetType().Name + " ):" + Environment.NewLine);
+                    ShowAllFields(currentObject);
+                    tbShowing.AppendText(Environment.NewLine);
+                    number++;
+                }
+            }
+            else
+            {
+                tbShowing.AppendText("Error of decompression! " + Environment.NewLine);
+            }
+
         }
     }
 }

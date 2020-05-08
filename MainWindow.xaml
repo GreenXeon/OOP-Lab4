@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab_2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1258.1" >
+        Title="MainWindow" Height="600" Width="1275.784" >
     <ScrollViewer HorizontalAlignment="Stretch">
-        <Grid x:Name="App" Loaded="App_Loaded" Width="1249">
+        <Grid x:Name="App" Loaded="App_Loaded" Width="1231">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0*"/>
                 <ColumnDefinition Width="26*"/>
@@ -43,13 +43,20 @@
                 <ListBoxItem Content="json" Cursor=""/>
                 <ListBoxItem Content="txt"/>
             </ComboBox>
-            <Button x:Name="btnSerialize" Content="Serialize objects" Grid.Column="3" HorizontalAlignment="Left" Height="33" Margin="714.6,178,0,0" VerticalAlignment="Top" Width="167" RenderTransformOrigin="0.042,0.815" Style="{StaticResource ButtonStyle}" Click="BtnSerialize_Click"/>
+            <Button x:Name="btnSerialize" Content="Serialize" Grid.Column="3" HorizontalAlignment="Left" Height="33" Margin="712.4,130,0,0" VerticalAlignment="Top" Width="167" RenderTransformOrigin="0.042,0.815" Style="{StaticResource ButtonStyle}" Click="BtnSerialize_Click"/>
             <TextBox x:Name="tbSelectedItems" Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="587.6,174,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="239" Visibility="Hidden"/>
-            <Button x:Name="btnDeserialize" Content="Deserialize objects" Grid.Column="3" HorizontalAlignment="Left" Margin="714.6,292,0,0" VerticalAlignment="Top" Width="167" Height="31" Style="{StaticResource ButtonStyle}" Click="BtnDeserialize_Click"/>
-            <Button x:Name="btnOpenFile" Content="Open File&#xD;&#xA; for&#xD;&#xA;deserialization ..." Grid.Column="3" HorizontalAlignment="Left" Margin="571.6,240,0,0" VerticalAlignment="Top" Width="138" Style="{StaticResource ButtonStyle}" Click="BtnOpenFile_Click" Height="83"/>
-            <Button x:Name="btnSaveFile" Content="Save &#xD;&#xA;serializaton&#xD;&#xA; in File ..." Grid.Column="3" HorizontalAlignment="Left" Margin="571.6,134,0,0" VerticalAlignment="Top" Width="138" Style="{StaticResource ButtonStyle}" RenderTransformOrigin="0.837,-0.168" Height="77" Click="BtnSaveFile_Click"/>
-            <TextBox x:Name="tbSaveFileName" Grid.Column="3" HorizontalAlignment="Left" Height="31" Margin="714.6,138,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True" Text="Path for chosen file in dialog"/>
-            <TextBox x:Name="tbOpenFileName" Grid.Column="3" HorizontalAlignment="Left" Height="33" Margin="714.6,243,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True" Text="Path for chosen file in dialog"/>
+            <Button x:Name="btnDeserialize" Content="Deserialize" Grid.Column="3" HorizontalAlignment="Left" Margin="715.4,236,0,0" VerticalAlignment="Top" Width="167" Height="31" Style="{StaticResource ButtonStyle}" Click="BtnDeserialize_Click"/>
+            <Button x:Name="btnOpenFile" Content="Open File&#xA; for..." Grid.Column="3" HorizontalAlignment="Left" Margin="571.4,184,0,0" VerticalAlignment="Top" Width="138" Style="{StaticResource ButtonStyle}" Click="BtnOpenFile_Click" Height="83" RenderTransformOrigin="0.512,-0.063"/>
+            <Button x:Name="btnSaveFile" Content="Save &#xA; in File ..." Grid.Column="3" HorizontalAlignment="Left" Margin="572.4,87,0,0" VerticalAlignment="Top" Width="138" Style="{StaticResource ButtonStyle}" RenderTransformOrigin="0.837,-0.168" Height="77" Click="BtnSaveFile_Click"/>
+            <TextBox x:Name="tbSaveFileName" Grid.Column="3" HorizontalAlignment="Left" Height="31" Margin="714.4,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True" Text="Path for chosen file in dialog"/>
+            <TextBox x:Name="tbOpenFileName" Grid.Column="3" HorizontalAlignment="Left" Height="33" Margin="713.4,186,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True" Text="Path for chosen file in dialog"/>
+            <ComboBox x:Name="cmbPlugins" Grid.Column="3" HorizontalAlignment="Left" Margin="579.4,300,0,0" VerticalAlignment="Top" Width="298"/>
+            <Button x:Name="btnSaveCompressed" Content="Compress&#xD;&#xA; in file..." Grid.Column="3" HorizontalAlignment="Left" Margin="579.4,337,0,0" VerticalAlignment="Top" Width="122" Style="{StaticResource ButtonStyle}" Click="BtnSaveCompressed_Click" Height="72"/>
+            <TextBox x:Name="tbSaveCompressed" Grid.Column="3" HorizontalAlignment="Left" Height="31" Margin="713.4,339,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True" Text="Path for chosen file in dialog"/>
+            <Button x:Name="btnCompress" Content="Compress" Grid.Column="3" HorizontalAlignment="Left" Margin="713.4,376,0,0" VerticalAlignment="Top" Width="160" Style="{StaticResource ButtonStyle}" Click="BtnCompress_Click"/>
+            <Button x:Name="btnOpenCompressed" Content="Open &#xD;&#xA;for &#xD;&#xA;decompression" Grid.Column="3" HorizontalAlignment="Left" Margin="573.4,433,0,0" VerticalAlignment="Top" Width="137" Style="{StaticResource ButtonStyle}" Click="BtnOpenCompressed_Click"/>
+            <Button x:Name="btnDecompress" Content="Decompress" Grid.Column="3" HorizontalAlignment="Left" Margin="719.4,473,0,0" VerticalAlignment="Top" Width="155" Style="{StaticResource ButtonStyle}" Click="BtnDecompress_Click" RenderTransformOrigin="0.636,-0.032"/>
+            <TextBox x:Name="tbOpenCompressed" Grid.Column="3" HorizontalAlignment="Left" Height="33" Margin="717.4,433,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True" Text="Path for chosen file in dialog"/>
 
         </Grid>
     </ScrollViewer>
