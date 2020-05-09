@@ -790,7 +790,7 @@ namespace Lab_2
 
             };
 
-            //dlg.Filter = IMySerialization.SerializatorsArray.filters;
+            dlg.Filter = "compressed files (*.cmp)|*.cmp";
 
             bool? result = dlg.ShowDialog();
 
@@ -798,8 +798,7 @@ namespace Lab_2
             {
                 SaveCompressedFileName = dlg.FileName;
                 tbSaveCompressed.Text = SaveCompressedFileName;
-               // fileType = dlg.FileName.Split(new char[] { '.' })[1];
-               // cmbSerializationType.Text = fileType;
+              
             }
 
         }
@@ -814,6 +813,8 @@ namespace Lab_2
                     var obj = PluginsAssembly.CreateInstance(currPlugin.FullName);
                     var method = currPlugin.GetMethod("Compress");
                     method.Invoke(obj, new object[] { workers, SaveCompressedFileName });
+                    tbShowing.AppendText("Compression was ended successfully!" + Environment.NewLine);
+                    break;
                 }
             }
             
@@ -828,25 +829,34 @@ namespace Lab_2
                 FileName = "Compressed.cmp"
             };
 
-            //dlg.Filter = IMySerialization.SerializatorsArray.filters;
+            dlg.Filter = "compressed files (*.cmp)|*.cmp";
 
             bool? result = dlg.ShowDialog();
             if (result == true)
             {
                 OpenCompressedFileName = dlg.FileName;
                 tbOpenCompressed.Text = OpenCompressedFileName;
-                //fileType = dlg.FileName.Split(new char[] { '.' })[1];
-                //cmbSerializationType.Text = fileType;
+              
             }
         }
 
         private void BtnDecompress_Click(object sender, RoutedEventArgs e)
         {
-            var currPlugin = PluginsLib[1];
-            var obj = PluginsAssembly.CreateInstance(currPlugin.FullName);
-            var method = currPlugin.GetMethod("Decompress");
-            var receivedObjects = method.Invoke(obj, new object[] { OpenCompressedFileName }) as List<object>;
+            byte marker = (byte)PluginsAssembly.GetType("IArchivePlugin.PluginIdentifier").GetMethod("FindPluginMarker", BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { OpenCompressedFileName });
+            List<object> receivedObjects = new List<object>();
 
+            foreach(var currPlugin in PluginsLib)
+            {
+                var obj = PluginsAssembly.CreateInstance(currPlugin.FullName);
+                if (marker ==(byte)currPlugin.GetProperty("marker").GetValue(obj))
+                {
+                    var method = currPlugin.GetMethod("Decompress");
+                    receivedObjects = method.Invoke(obj, new object[] { OpenCompressedFileName }) as List<object>;
+                    break;
+                }
+               
+            }
+          
             if (receivedObjects.Count != 0)
             {
                 tbShowing.AppendText("Decompression was ended successfully!" + Environment.NewLine);
