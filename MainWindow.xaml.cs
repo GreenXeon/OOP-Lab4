@@ -28,7 +28,7 @@ namespace Lab_2
     public partial class MainWindow : Window
     {
 
-        static readonly List<object> workers = new List<object>();
+        static  List<object> workers = new List<object>();
         static Assembly ClassesAssembly;
         static Assembly PluginsAssembly;
         static List<Type> ClassesTypesLib = new List<Type>();
@@ -50,7 +50,7 @@ namespace Lab_2
         private void App_Loaded(object sender, RoutedEventArgs e)
         {
 
-            ClassesAssembly = Assembly.LoadFile(@"D:\УНИК\4 сем\OOP\Lab_3\classes\class_library\bin\Debug\class_library.dll");
+            ClassesAssembly = Assembly.LoadFile(@"E:\BSUIR\4 Sem\OOP\Lab4\Lab_3\classes\class_library\bin\Debug\class_library.dll");
             ClassesTypesLib = ClassesAssembly.GetTypes().Where(type => type.IsClass).ToList();
 
             foreach (var currentClass in ClassesTypesLib)
@@ -59,7 +59,7 @@ namespace Lab_2
                     cmbClasses.Items.Add(currentClass.Name);
             }
 
-            PluginsAssembly = Assembly.LoadFile(@"D:\УНИК\4 сем\OOP\Lab_3\classes\IArchivePlugin\bin\Debug\netstandard2.0\IArchivePlugin.dll");
+            PluginsAssembly = Assembly.LoadFile(@"E:\BSUIR\4 Sem\OOP\Lab4\Lab_3\classes\IArchivePlugin\bin\Debug\netstandard2.0\IArchivePlugin.dll");
             PluginsLib = FindAllPlugins(PluginsAssembly, "IPlugin");
 
             foreach (var currentPlugin in PluginsLib)
@@ -843,27 +843,28 @@ namespace Lab_2
         private void BtnDecompress_Click(object sender, RoutedEventArgs e)
         {
             byte marker = (byte)PluginsAssembly.GetType("IArchivePlugin.PluginIdentifier").GetMethod("FindPluginMarker", BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { OpenCompressedFileName });
-            List<object> receivedObjects = new List<object>();
+            //List<object> receivedObjects = new List<object>();
 
             foreach(var currPlugin in PluginsLib)
             {
                 var obj = PluginsAssembly.CreateInstance(currPlugin.FullName);
                 if (marker ==(byte)currPlugin.GetProperty("marker").GetValue(obj))
                 {
+                    workers.Clear();
                     var method = currPlugin.GetMethod("Decompress");
-                    receivedObjects = method.Invoke(obj, new object[] { OpenCompressedFileName }) as List<object>;
+                    workers = method.Invoke(obj, new object[] { OpenCompressedFileName }) as List<object>;
                     break;
                 }
                
             }
           
-            if (receivedObjects.Count != 0)
+            if (workers.Count != 0)
             {
                 tbShowing.AppendText("Decompression was ended successfully!" + Environment.NewLine);
 
                 int number = 1;
                 tbShowing.AppendText("Decompressed objects: " + Environment.NewLine);
-                foreach (var currentObject in receivedObjects)
+                foreach (var currentObject in workers)
                 {
                     tbShowing.AppendText(number.ToString() + ". ("
                                         + currentObject.GetType().Name + " ):" + Environment.NewLine);
